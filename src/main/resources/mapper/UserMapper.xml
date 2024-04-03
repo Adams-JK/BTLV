@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zykj.btlv.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.zykj.btlv.domain.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="parentAddress" column="parentAddress" jdbcType="VARCHAR"/>
+            <result property="lp" column="lp" jdbcType="DECIMAL"/>
+            <result property="balance" column="balance" jdbcType="DECIMAL"/>
+            <result property="totalQuota" column="totalQuota" jdbcType="DECIMAL"/>
+            <result property="surplusQuota" column="surplusQuota" jdbcType="DECIMAL"/>
+            <result property="received" column="received" jdbcType="DECIMAL"/>
+            <result property="grade" column="grade" jdbcType="INTEGER"/>
+            <result property="usdtPrice" column="usdtPrice" jdbcType="DECIMAL"/>
+            <result property="people" column="people" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,address,parentAddress,
+        lp,balance,totalQuota,
+        surplusQuota,received,grade,
+        usdtPrice,people
+    </sql>
+</mapper>

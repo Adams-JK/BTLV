@@ -1,0 +1,45 @@
+#通用配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml         #SQL XML file address
+  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    mapUnderscoreToCamelCase: true
+    # If the query result contains MathTool null column, MyBatis will not map this column during mapping
+    call-setters-on-nulls: true
+  global-config:
+    banner: true
+    #IGNORED:" ignore judgment "NOT_NULL:" Non-null judgment ") NOT_EMPTY:" Non-null judgment"
+    field-strategy: NOT_EMPTY
+    db-config:
+      #Primary key type AUTO:" database ID increment "INPUT:" user INPUT ID",ID_WORKER:" globally unique ID (numeric type unique ID)", UUID:" globally unique ID UUID";
+      id-type: INPUT
+
+
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  task:
+    scheduling:
+      pool:
+        size: 3            # 线程池核心线程数
+        max-size: 3        # 线程池最大线程数
+        keep-alive: 30s     # 线程池空闲线程存活时间
+        queue-capacity: 3
+      thread-name-prefix: "btlv-"  # 线程名称前缀
+      await-termination: true    # 是否等待任务完成
+      await-termination-period: 60s   # 等待任务完成的超时时间
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 6MB
+  profiles:
+    active: test
+#swagger
+swagger:
+  enable: true
+
+chainId: "56"
+contract: "0xbc1F4B4D69Abfec99edc7343B601cB01E0AfE08B"
+
