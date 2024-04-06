@@ -19,13 +19,4 @@ public class ChainConstant {
             "https://bsc-dataseed2.defibit.io",
             "https://bsc-dataseed1.ninicoin.io"
     );
-
-    public static List<String> mtcURL = Arrays.asList(
-            "http://8.217.4.29:13568/",
-            "http://8.217.1.140:13568/",
-            "http://8.217.4.246:13568/",
-            "http://8.210.91.136:13568/",
-            "https://seed1.metachain1.com",
-            "http://8.217.194.100:13568"
-    );
 }

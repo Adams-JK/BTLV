@@ -31,6 +31,9 @@ public class WalletTradeTask {
     @Value("${contract}")
     public String contract;
 
+    @Value("${pair}")
+    public String pair;
+
     @Autowired
     public Web3jConfig web3jConfig;
 
@@ -89,6 +92,7 @@ public class WalletTradeTask {
     public void digital(){
         List<User> list = userMapper.selectList(null);
         if(ObjectUtil.isNotEmpty(list)){
+
             for(User user : list){
 
             }

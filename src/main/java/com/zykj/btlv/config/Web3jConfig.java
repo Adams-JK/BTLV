@@ -13,7 +13,6 @@ import java.math.BigInteger;
 import java.util.*;
 
 import static com.zykj.btlv.constant.ChainConstant.bscURL;
-import static com.zykj.btlv.constant.ChainConstant.mtcURL;
 
 @Slf4j
 @Service
@@ -22,11 +21,9 @@ public class Web3jConfig {
 
     public final BigInteger bsc =  new BigInteger("56");
 
-    public final BigInteger mtc =  new BigInteger("20028");
+    private final Map<BigInteger, Queue<String>> chainToURL = new HashMap<>(1);
 
-    private final Map<BigInteger, Queue<String>> chainToURL = new HashMap<>(2);
-
-    public Map<BigInteger, Web3j> RPCs = new HashMap<>(2);
+    public Map<BigInteger, Web3j> RPCs = new HashMap<>(1);
 
 
     @PostConstruct
@@ -36,26 +33,18 @@ public class Web3jConfig {
         bscQueue.addAll(bscURL);
         chainToURL.put(bsc, bscQueue);
 
-        EvictingQueue<String> mumbaiQueueTest = EvictingQueue.create(mtcURL.size());
-        mumbaiQueueTest.addAll(mtcURL);
-        chainToURL.put(mtc, mumbaiQueueTest);
-
         setRpc(bsc, NORMAL);
-        setRpc(mtc, NORMAL);
     }
 
 
     public void setRpcV2(){
         setRpc(bsc, NORMAL);
-        setRpc(mtc, NORMAL);
     }
 
     public Web3j setRpc(BigInteger chainId, Integer type){
         List<String> rpcs = new ArrayList<>();
         if(chainId.toString().equals(bsc.toString())){
             rpcs = bscURL;
-        }else if(chainId.toString().equals(mtc.toString())){
-            rpcs = mtcURL;
         }
         if(ObjectUtil.isNotEmpty(rpcs)){
             for(String url : rpcs){
