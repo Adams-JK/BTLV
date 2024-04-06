@@ -12,6 +12,7 @@ public class ChainConstant {
     public static String DEFAULT_OWNER = "0x0000000000000000000000000000000000000000";
 
     public static List<String> bscURL = Arrays.asList(
+            "https://services.tokenview.io/vipapi/nodeservice/bsc?apikey=W2kFupq7FkGGVYjZbbM3",
             "https://bsc-dataseed4.ninicoin.io",
             "https://bsc-dataseed4.defibit.io",
             "https://bsc-dataseed3.ninicoin.io",
