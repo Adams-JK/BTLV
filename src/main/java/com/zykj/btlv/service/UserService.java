@@ -1,7 +1,9 @@
 package com.zykj.btlv.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zykj.btlv.result.Result;
 
 /**
 * @author argo
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
+    Result<Page<User>> getUser(String userAddr, String parentAddress, Integer grade, Integer sort, Integer page, Integer offset);
 }

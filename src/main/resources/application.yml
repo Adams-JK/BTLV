@@ -41,6 +41,6 @@ swagger:
   enable: true
 
 chainId: "56"
-contract: "0x4a349e8ac8b8ab40db8c4daf78fcb6a5358b2c6a"
-pair: "0x7ac8b06f0f1e58fb1845b2bf5bf426a4d17e726b"
+contract: "0x4Ffb718862757eDa8e2Ca5542E80779b6b12CD31"
+pair: "0xc912826f2af862b4f60a44bb8042624ceb3146c2"
 

@@ -28,4 +28,8 @@ public class MoneyTransferTool {
         return amount.multiply(BigDecimal.TEN.pow(18)).toBigInteger();
     }
 
+    public static BigDecimal transferLong(String price){
+        return new BigDecimal(price).divide(BigDecimal.TEN.pow(18),18,BigDecimal.ROUND_DOWN);
+    }
+
 }
