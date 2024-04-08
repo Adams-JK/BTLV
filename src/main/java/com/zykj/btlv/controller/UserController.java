@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zykj.btlv.domain.AwardRecord;
 import com.zykj.btlv.domain.User;
 import com.zykj.btlv.result.Result;
+import com.zykj.btlv.result.ResultUtil;
 import com.zykj.btlv.service.UserService;
+import com.zykj.btlv.vo.DistributeDataVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,6 +28,9 @@ import java.math.BigDecimal;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @Value("${batchTransferERC20}")
+    public String batchTransferERC20;
 
     @ApiOperation("获取用户信息")
     @ApiImplicitParams({
@@ -65,7 +70,24 @@ public class UserController {
     })
     @SaCheckLogin
     @RequestMapping(value = "/getPool", method = RequestMethod.GET)
-    public Result<BigDecimal> getPool(@RequestParam(required = true) Integer type) throws Exception {
+    public Result<BigDecimal> getPool(@RequestParam Integer type) throws Exception {
         return userService.getPool(type);
+    }
+
+    @ApiOperation("获取分配合约")
+    @SaCheckLogin
+    @RequestMapping(value = "/getDistribute", method = RequestMethod.GET)
+    public Result<String> getDistribute() throws Exception {
+        return ResultUtil.success(batchTransferERC20);
+    }
+
+    @ApiOperation("获取分配数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type",value = "1：LP，2：持币", required = true, dataType = "int")
+    })
+    @SaCheckLogin
+    @RequestMapping(value = "/getDistributeData", method = RequestMethod.GET)
+    public Result<DistributeDataVo> getDistributeData(@RequestParam Integer type) throws Exception {
+        return userService.getDistributeData(type);
     }
 }

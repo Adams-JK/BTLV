@@ -5,6 +5,7 @@ import com.zykj.btlv.domain.AwardRecord;
 import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zykj.btlv.result.Result;
+import com.zykj.btlv.vo.DistributeDataVo;
 
 import java.math.BigDecimal;
 
@@ -20,4 +21,6 @@ public interface UserService extends IService<User> {
     Result<Page<AwardRecord>> getRecord(String userAddr, Integer type, Integer page, Integer offset);
 
     Result<BigDecimal> getPool(Integer type);
+
+    Result<DistributeDataVo> getDistributeData(Integer type);
 }

@@ -10,10 +10,12 @@ import com.zykj.btlv.domain.AwardRecord;
 import com.zykj.btlv.domain.User;
 import com.zykj.btlv.mapper.AwardRecordMapper;
 import com.zykj.btlv.result.Result;
+import com.zykj.btlv.result.ResultEnum;
 import com.zykj.btlv.result.ResultUtil;
 import com.zykj.btlv.service.UserService;
 import com.zykj.btlv.mapper.UserMapper;
 import com.zykj.btlv.tool.MoneyTransferTool;
+import com.zykj.btlv.vo.DistributeDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author argo
@@ -129,7 +134,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }catch(Exception e){
             throw new RuntimeException(e);
         }
-        return null;
+        return ResultUtil.success(btlvBalance);
+    }
+
+    @Override
+    public Result<DistributeDataVo> getDistributeData(Integer type) {
+        Web3j web3j = web3jConfig.getWeb3jById(new BigInteger(chainIds));
+        ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
+        BigInteger btlvBalance = new BigInteger("0");
+        List<User> users = new ArrayList<>();
+        try {
+            if (type.equals(1)) {
+                btlvBalance = new BigInteger(btlv.balanceOf(node).toString());
+                users = userMapper.getLPAddr();
+            }else {
+                btlvBalance = new BigInteger(btlv.balanceOf(market).toString());
+                users = userMapper.getHoldAddr();
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        if(btlvBalance.compareTo(new BigInteger("10000000000000000000")) < 0 || users.size() < 1){
+            return ResultUtil.error(ResultEnum.FAIL);
+        }
+        List<String> address = users.stream().map(s -> s.getAddress()).collect(Collectors.toList());
+        List<BigDecimal> ss = new ArrayList<>();
+        if (type.equals(1)) {
+            ss = users.stream().map(s -> s.getLp()).collect(Collectors.toList());
+        }else {
+            ss = users.stream().map(s -> s.getBalance()).collect(Collectors.toList());
+        }
+        BigDecimal sum = ss.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<BigInteger> quota = new ArrayList<>();
+        for(BigDecimal decimal : ss){
+            BigInteger a = new BigDecimal(btlvBalance).multiply(decimal.divide(sum,8,RoundingMode.HALF_DOWN)).toBigInteger();
+            quota.add(a);
+        }
+        DistributeDataVo dataVo = DistributeDataVo.builder()
+                .userAddr(address)
+                .quota(quota)
+                .build();
+        return ResultUtil.success(dataVo);
     }
 }
 

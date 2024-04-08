@@ -3,6 +3,9 @@ package com.zykj.btlv.mapper;
 import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author argo
@@ -13,6 +16,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
+    @Select("select * from user where lp > 0")
+    List<User> getLPAddr();
+
+    @Select("select * from user where balance > 500000000")
+    List<User> getHoldAddr();
 }
 
 
