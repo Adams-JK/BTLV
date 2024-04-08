@@ -4,14 +4,25 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.blockchain.tools.eth.contract.template.ERC20Contract;
+import com.zykj.btlv.config.Web3jConfig;
+import com.zykj.btlv.domain.AwardRecord;
 import com.zykj.btlv.domain.User;
+import com.zykj.btlv.mapper.AwardRecordMapper;
 import com.zykj.btlv.result.Result;
 import com.zykj.btlv.result.ResultUtil;
 import com.zykj.btlv.service.UserService;
 import com.zykj.btlv.mapper.UserMapper;
+import com.zykj.btlv.tool.MoneyTransferTool;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.web3j.protocol.Web3j;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 
 /**
 * @author argo
@@ -23,6 +34,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private AwardRecordMapper recordMapper;
+
+    @Value("${node}")
+    public String node;
+
+    @Value("${market}")
+    public String market;
+
+    @Value("${contract}")
+    public String contract;
+
+    @Value("${chainId}")
+    public String chainIds;
+
+    @Autowired
+    public Web3jConfig web3jConfig;
 
     @Override
     public Result<Page<User>> getUser(String userAddr, String parentAddress, Integer grade, Integer sort, Integer page, Integer offset) {
@@ -62,6 +91,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         Page<User> iPage = new Page<User>(page, offset);
         Page<User> selectPage = userMapper.selectPage(iPage,wrapper);
         return ResultUtil.success(selectPage);
+    }
+
+    @Override
+    public Result<Page<AwardRecord>> getRecord(String userAddr, Integer type, Integer page, Integer offset) {
+        QueryWrapper<AwardRecord> wrapper = new QueryWrapper<>();
+        if(ObjectUtil.isNotEmpty(userAddr)){
+            wrapper.eq("address",userAddr);
+        }
+
+        if(ObjectUtil.isNotEmpty(type)){
+            wrapper.eq("type",type);
+        }
+        wrapper.orderByDesc("time");
+        if(ObjectUtil.isEmpty(page) || page < 0){
+            page = 1;
+        }
+        if(ObjectUtil.isEmpty(offset) || offset < 0){
+            offset = 10;
+        }
+        Page<AwardRecord> iPage = new Page<AwardRecord>(page, offset);
+        Page<AwardRecord> selectPage = recordMapper.selectPage(iPage,wrapper);
+        return ResultUtil.success(selectPage);
+    }
+
+    @Override
+    public Result<BigDecimal> getPool(Integer type) {
+        Web3j web3j = web3jConfig.getWeb3jById(new BigInteger(chainIds));
+        ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
+        BigDecimal btlvBalance = new BigDecimal("0");
+        try {
+            if (type.equals(1)) {
+                btlvBalance = MoneyTransferTool.transferLong(btlv.balanceOf(node).toString());
+            }else {
+                btlvBalance = MoneyTransferTool.transferLong(btlv.balanceOf(market).toString());
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
 

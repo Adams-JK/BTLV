@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zykj.btlv.mapper.AwardRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.zykj.btlv.domain.AwardRecord">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="hash" column="hash" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="amount" column="amount" jdbcType="DECIMAL"/>
+            <result property="time" column="time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,hash,address,
+        amount,time
+    </sql>
+</mapper>

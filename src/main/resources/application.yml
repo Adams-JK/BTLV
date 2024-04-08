@@ -36,6 +36,26 @@ spring:
       max-file-size: 6MB
   profiles:
     active: test
+
+sa-token:
+  # jwt??
+  jwt-secret-key: hkdsajdlkhsdjslkdjashdmbfhck
+  # token名称 (同时也是cookie名称)
+  token-name: authorization
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 21600
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  active-timeout: -1
+  is-read-head: true
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: tik
+  # 是否输出操作日志
+  is-log: false
+
 #swagger
 swagger:
   enable: true
@@ -43,4 +63,7 @@ swagger:
 chainId: "56"
 contract: "0x4Ffb718862757eDa8e2Ca5542E80779b6b12CD31"
 pair: "0xc912826f2af862b4f60a44bb8042624ceb3146c2"
+batchTransferERC20: "0x03C84f150F2baFBd972Aa26A5F470CD8C29c8044"
+node: "0x4A1ABae3EbfF2a7561F898deD36F7402c9428fED"
+market: "0x4bC774896b5C166a9b755E43056C60cA37313bCD"
 

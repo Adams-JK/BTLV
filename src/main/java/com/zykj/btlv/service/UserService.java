@@ -1,9 +1,12 @@
 package com.zykj.btlv.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zykj.btlv.domain.AwardRecord;
 import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zykj.btlv.result.Result;
+
+import java.math.BigDecimal;
 
 /**
 * @author argo
@@ -13,4 +16,8 @@ import com.zykj.btlv.result.Result;
 public interface UserService extends IService<User> {
 
     Result<Page<User>> getUser(String userAddr, String parentAddress, Integer grade, Integer sort, Integer page, Integer offset);
+
+    Result<Page<AwardRecord>> getRecord(String userAddr, Integer type, Integer page, Integer offset);
+
+    Result<BigDecimal> getPool(Integer type);
 }
