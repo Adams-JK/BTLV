@@ -40,12 +40,19 @@ public class Test {
 
 
     public static void main(String[] args) {
-        Web3j web3j = Web3j.build(new HttpService("https://services.tokenview.io/vipapi/nodeservice/bsc?apikey=W2kFupq7FkGGVYjZbbM3"));
-        ERC20Contract btlv = ERC20Contract.builder(web3j, "0x8D7d1190bd95814DA3b24ACd4C7203F479cA7a5F");
-        for(int i = 60;i<999999;i++){
+        Web3j web3j = Web3j.build(new HttpService("https://bsc-dataseed4.ninicoin.io"));
+        ERC20Contract btlv = ERC20Contract.builder(web3j, "0x3799E388933021A29d8a5180824225A2f593ae54");
+        for(int i = 2583;i<99999999;i++){
+            if(i % 1000 == 0){
+                web3j = Web3j.build(new HttpService("https://bsc-dataseed4.ninicoin.io"));
+                btlv = ERC20Contract.builder(web3j, "0x3799E388933021A29d8a5180824225A2f593ae54");
+            }
             String aa = generateContractAddresses(new BigInteger(String.valueOf(i)),btlv);
             System.out.println(i+aa);
-            if(aa.substring(aa.length()-4).equals("9999")){
+            String cc = aa.substring(aa.length()-3);
+            if(cc.equals("999")
+                    || cc.equals("888")
+                    || cc.equals("666")){
                 return;
             }
         }

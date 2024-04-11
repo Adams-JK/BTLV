@@ -166,10 +166,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         BigDecimal sum = ss.stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        List<BigInteger> quota = new ArrayList<>();
+        List<String> quota = new ArrayList<>();
         for(BigDecimal decimal : ss){
             BigInteger a = new BigDecimal(btlvBalance).multiply(decimal.divide(sum,8,RoundingMode.HALF_DOWN)).toBigInteger();
-            quota.add(a);
+            quota.add(a.toString());
         }
         DistributeDataVo dataVo = DistributeDataVo.builder()
                 .userAddr(address)

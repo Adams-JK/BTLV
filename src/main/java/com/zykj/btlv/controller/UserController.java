@@ -32,6 +32,15 @@ public class UserController {
     @Value("${batchTransferERC20}")
     public String batchTransferERC20;
 
+    @Value("${contract}")
+    public String contract;
+
+    @Value("${node}")
+    public String node;
+
+    @Value("${market}")
+    public String market;
+
     @ApiOperation("获取用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAddr",value = "用户地址", required = false, dataType = "string"),
@@ -79,6 +88,24 @@ public class UserController {
     @RequestMapping(value = "/getDistribute", method = RequestMethod.GET)
     public Result<String> getDistribute() throws Exception {
         return ResultUtil.success(batchTransferERC20);
+    }
+
+    @ApiOperation("获取地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type",value = "1：LP地址，2：持币地址，3：btlv地址", required = true, dataType = "int")
+    })
+    @SaCheckLogin
+    @RequestMapping(value = "/getAddr", method = RequestMethod.GET)
+    public Result<String> getAddr(@RequestParam Integer type) throws Exception {
+        String addr = "";
+        if(type.equals(1)){
+            addr = node;
+        }else if(type.equals(2)){
+            addr = market;
+        }else if(type.equals(3)){
+            addr = contract;
+        }
+        return ResultUtil.success(addr);
     }
 
     @ApiOperation("获取分配数据")

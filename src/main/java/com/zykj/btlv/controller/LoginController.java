@@ -1,5 +1,6 @@
 package com.zykj.btlv.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.zykj.btlv.req.LoginReq;
 import com.zykj.btlv.result.Result;
@@ -40,5 +41,10 @@ public class LoginController {
             return ResultUtil.error(ResultEnum.FAIL);
         }
 
+    }
+
+    @RequestMapping("isLogin")
+    public Result<Boolean> isLogin() {
+        return ResultUtil.success(StpUtil.isLogin());
     }
 }

@@ -15,5 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class DistributeDataVo {
     private List<String> userAddr;//用户地址
-    private List<BigInteger> quota;//额度
+    private List<String> quota;//额度
 }
