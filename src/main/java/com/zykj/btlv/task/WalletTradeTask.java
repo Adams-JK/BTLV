@@ -165,8 +165,7 @@ public class WalletTradeTask {
                         AssetsVo assetsVo = getAssets(user.getAddress());
                         BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
                         BigDecimal lpBalance = new BigDecimal(lpPair.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
-                        BigDecimal btlvLpBalance = btlvPairBalance.multiply(lpBalance.divide(lpTotal, 8, RoundingMode.DOWN));
-                        user.setLp(btlvLpBalance);
+                        user.setLp(lpBalance);
                         user.setBalance(btlvBalance);
                         user.setUsdtPrice(userVo.getUsdtPrice());
                         user.setParentAddress(userVo.getParentAddress());
