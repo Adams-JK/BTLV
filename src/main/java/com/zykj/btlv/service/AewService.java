@@ -88,6 +88,7 @@ public class AewService {
                     if (logResult instanceof EthLog.LogObject) {
                         EthLog.LogObject logObject = (EthLog.LogObject) logResult;
                         String data = logObject.getData();
+                        data = data.substring(2);//去掉ox
                         String[] params = str_split(data, 64);
                         log.info("监听合约事件 input:{}", data);
                         dealEvent(logObject.getAddress(), params,logObject.getTransactionHash());

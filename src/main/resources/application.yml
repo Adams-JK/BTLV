@@ -35,7 +35,7 @@ spring:
       max-request-size: 20MB
       max-file-size: 6MB
   profiles:
-    active: test
+    active: pro
 
 sa-token:
   # jwt??
@@ -61,9 +61,9 @@ swagger:
   enable: true
 
 chainId: "56"
-contract: "0x4Ffb718862757eDa8e2Ca5542E80779b6b12CD31"
-pair: "0xc912826f2af862b4f60a44bb8042624ceb3146c2"
-batchTransferERC20: "0x37a9b3506c0783c5e0e9804fd8e75cc5299d277d"
-node: "0x5cFd4247D1cE1496D7b7fc90a59db8Fd9328aF7D"
-market: "0x6afdf721593A3673451973bEfF8c4dc076d28192"
+contract: "0x63b7698e74d902099f97fd515faed899afc6b666"
+pair: "0x62340326bfc4ba28702a2592f3ead956e1ddb79f"
+batchTransferERC20: "0x481D64B7d615D132c264C33D86c8215fCe983746"
+node: "0x5Ea49BBBF6611071ec6d3040f7B81430864f90f4"
+market: "0xf16E37eFbCf7519434eE750bdDf91a8050Cd0b7D"
 
