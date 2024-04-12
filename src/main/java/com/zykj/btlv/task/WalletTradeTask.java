@@ -160,24 +160,27 @@ public class WalletTradeTask {
                 BigDecimal btlvPairBalance = new BigDecimal(btlv.balanceOf(pair)).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
                 BigDecimal lpTotal = new BigDecimal(lpPair.totalSupply()).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
                 for (User user : list) {
-                    try {
-                        UserVo userVo = getUser(user.getAddress());
-                        AssetsVo assetsVo = getAssets(user.getAddress());
-                        BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
-                        BigDecimal lpBalance = new BigDecimal(lpPair.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
-                        user.setLp(lpBalance);
-                        user.setBalance(btlvBalance);
-                        user.setUsdtPrice(userVo.getUsdtPrice());
-                        user.setParentAddress(userVo.getParentAddress());
-                        user.setTotalQuota(assetsVo.getTotalQuota());
-                        user.setSurplusQuota(assetsVo.getSurplusQuota());
-                        user.setReceived(assetsVo.getReceived());
-                        user.setGrade(userVo.getGrade());
-                        user.setPeople(userVo.getPeople());
-                        userMapper.updateById(user);
-                    } catch (Exception e) {
-                        log.error(e.getMessage());
+                    if(!user.getAddress().equalsIgnoreCase(pair)){
+                        try {
+                            UserVo userVo = getUser(user.getAddress());
+                            AssetsVo assetsVo = getAssets(user.getAddress());
+                            BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            BigDecimal lpBalance = new BigDecimal(lpPair.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            user.setLp(lpBalance);
+                            user.setBalance(btlvBalance);
+                            user.setUsdtPrice(userVo.getUsdtPrice());
+                            user.setParentAddress(userVo.getParentAddress());
+                            user.setTotalQuota(assetsVo.getTotalQuota());
+                            user.setSurplusQuota(assetsVo.getSurplusQuota());
+                            user.setReceived(assetsVo.getReceived());
+                            user.setGrade(userVo.getGrade());
+                            user.setPeople(userVo.getPeople());
+                            userMapper.updateById(user);
+                        } catch (Exception e) {
+                            log.error(e.getMessage());
+                        }
                     }
+
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
