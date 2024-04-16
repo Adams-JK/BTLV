@@ -19,6 +19,7 @@ import com.zykj.btlv.vo.DistributeDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.web3j.protocol.Web3j;
 
 import javax.annotation.Resource;
@@ -176,6 +177,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .quota(quota)
                 .build();
         return ResultUtil.success(dataVo);
+    }
+
+    @Override
+    public List<String> getDistributeDataV2(Integer type) {
+        Web3j web3j = web3jConfig.getWeb3jById(new BigInteger(chainIds));
+        ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
+        BigInteger btlvBalance = new BigInteger("0");
+        List<User> users = new ArrayList<>();
+        try {
+            if (type.equals(1)) {
+                btlvBalance = new BigInteger(btlv.balanceOf(node).toString());
+                users = userMapper.getLPAddr();
+            }else {
+                btlvBalance = new BigInteger(btlv.balanceOf(market).toString());
+                users = userMapper.getHoldAddr();
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        if(btlvBalance.compareTo(new BigInteger("10000000000000000000")) < 0 || users.size() < 1){
+            return null;
+        }
+        List<String> address = users.stream().map(s -> s.getAddress()).collect(Collectors.toList());
+        List<BigDecimal> ss = new ArrayList<>();
+        if (type.equals(1)) {
+            ss = users.stream().map(s -> s.getLp()).collect(Collectors.toList());
+        }else {
+            ss = users.stream().map(s -> s.getBalance()).collect(Collectors.toList());
+        }
+        BigDecimal sum = ss.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<String> quota = new ArrayList<>();
+        for(BigDecimal decimal : ss){
+            BigInteger a = new BigDecimal(btlvBalance).multiply(decimal.divide(sum,8,RoundingMode.HALF_DOWN)).toBigInteger();
+            quota.add(a.toString());
+        }
+        List<String> ssss = new ArrayList<>();
+        for(int i = 0;i<address.size();i++){
+            String aa = address.get(i) + "-----" + new BigDecimal(quota.get(i)).divide(BigDecimal.TEN.pow(18),6,RoundingMode.HALF_DOWN);
+            ssss.add(aa);
+        }
+        return ssss;
     }
 }
 

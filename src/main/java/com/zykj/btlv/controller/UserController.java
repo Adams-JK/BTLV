@@ -15,10 +15,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -116,5 +119,17 @@ public class UserController {
     @RequestMapping(value = "/getDistributeData", method = RequestMethod.GET)
     public Result<DistributeDataVo> getDistributeData(@RequestParam Integer type) throws Exception {
         return userService.getDistributeData(type);
+    }
+
+    @ApiOperation("分配数据展示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type",value = "1：LP，2：持币", required = true, dataType = "int")
+    })
+    @RequestMapping(value = "/getDistributeDataV2", method = RequestMethod.GET)
+    public ModelAndView getDistributeDataV2(@RequestParam Integer type) throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sortedPage"); // 设置视图名称为 sortedPage.html
+        modelAndView.addObject("sortedData", userService.getDistributeDataV2(type)); // 添加模型数据
+        return modelAndView;
     }
 }

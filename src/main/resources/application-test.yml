@@ -4,7 +4,7 @@ server:
   port: 8093
 spring:
   datasource:
-    url: jdbc:mysql://193.134.209.25:3306/btlv?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:mysql://43.247.134.121:3306/btlv?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: btlv
     password: c8K5wPNG64J87BtD
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,7 +12,7 @@ spring:
 
   redis:
     database: 1
-    host: 193.134.209.25
+    host: 43.247.134.121
     port: 6379
     username:
     password: testRedisMeTa@12#abC

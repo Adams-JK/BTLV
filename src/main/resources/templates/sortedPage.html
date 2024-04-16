@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorted Page</title>
+</head>
+<body>
+<ul>
+    <!-- 使用 Thymeleaf 循环遍历排序后的数据 -->
+    <li th:each="item : ${sortedData}" th:text="${item}"></li>
+</ul>
+</body>
+</html>

@@ -6,8 +6,10 @@ import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zykj.btlv.result.Result;
 import com.zykj.btlv.vo.DistributeDataVo;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
 * @author argo
@@ -23,4 +25,6 @@ public interface UserService extends IService<User> {
     Result<BigDecimal> getPool(Integer type);
 
     Result<DistributeDataVo> getDistributeData(Integer type);
+
+    List<String> getDistributeDataV2(Integer type);
 }

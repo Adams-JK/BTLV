@@ -2,6 +2,7 @@ package com.zykj.btlv.task;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blockchain.tools.eth.codec.EthAbiCodecTool;
 import com.blockchain.tools.eth.contract.template.ERC20Contract;
 import com.zykj.btlv.config.Web3jConfig;
@@ -90,7 +91,7 @@ public class WalletTradeTask {
                 return;
             }
             if (lCurrentBlockNumber >= startBlockNum + 40000) {
-                startBlockNum = lCurrentBlockNumber - 40000;
+                lCurrentBlockNumber = startBlockNum + 4000;
             }
             if (ObjectUtil.isNotEmpty(WalletTradeService.disposable)) {
                 WalletTradeService.disposable.dispose();
@@ -157,11 +158,20 @@ public class WalletTradeTask {
             ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
             ERC20Contract lpPair = ERC20Contract.builder(web3j, pair);
             try {
-                BigDecimal btlvPairBalance = new BigDecimal(btlv.balanceOf(pair)).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
-                BigDecimal lpTotal = new BigDecimal(lpPair.totalSupply()).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
                 for (User user : list) {
-                    if(!user.getAddress().equalsIgnoreCase(pair)){
-                        try {
+                    log.info(user.getAddress());
+                    try {
+                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract)){
+                            user.setLp(new BigDecimal("0"));
+                            user.setBalance(new BigDecimal("0"));
+                            user.setUsdtPrice(new BigDecimal("0"));
+                            user.setParentAddress("");
+                            user.setTotalQuota(new BigDecimal("0"));
+                            user.setSurplusQuota(new BigDecimal("0"));
+                            user.setReceived(new BigDecimal("0"));
+                            user.setGrade(0);
+                            user.setPeople(0);
+                        }else {
                             UserVo userVo = getUser(user.getAddress());
                             AssetsVo assetsVo = getAssets(user.getAddress());
                             BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
@@ -175,10 +185,63 @@ public class WalletTradeTask {
                             user.setReceived(assetsVo.getReceived());
                             user.setGrade(userVo.getGrade());
                             user.setPeople(userVo.getPeople());
-                            userMapper.updateById(user);
-                        } catch (Exception e) {
-                            log.error(e.getMessage());
                         }
+
+                        userMapper.updateById(user);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+
+        }
+    }
+
+    @Scheduled(fixedDelay = 1000 * 60)
+    public void digital22() {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.isNull("parentAddress").or().eq("parentAddress","");
+        List<User> list = userMapper.selectList(wrapper);
+        if (ObjectUtil.isNotEmpty(list)) {
+            Web3j web3j = web3jConfig.getWeb3jById(new BigInteger(chainIds));
+            ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
+            ERC20Contract lpPair = ERC20Contract.builder(web3j, pair);
+            try {
+                for (User user : list) {
+                    log.info(user.getAddress());
+                    try {
+                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract)){
+                            user.setLp(new BigDecimal("0"));
+                            user.setBalance(new BigDecimal("0"));
+                            user.setUsdtPrice(new BigDecimal("0"));
+                            user.setParentAddress("");
+                            user.setTotalQuota(new BigDecimal("0"));
+                            user.setSurplusQuota(new BigDecimal("0"));
+                            user.setReceived(new BigDecimal("0"));
+                            user.setGrade(0);
+                            user.setPeople(0);
+                        }else {
+                            UserVo userVo = getUser(user.getAddress());
+                            AssetsVo assetsVo = getAssets(user.getAddress());
+                            BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            BigDecimal lpBalance = new BigDecimal(lpPair.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            user.setLp(lpBalance);
+                            user.setBalance(btlvBalance);
+                            user.setUsdtPrice(userVo.getUsdtPrice());
+                            user.setParentAddress(userVo.getParentAddress());
+                            user.setTotalQuota(assetsVo.getTotalQuota());
+                            user.setSurplusQuota(assetsVo.getSurplusQuota());
+                            user.setReceived(assetsVo.getReceived());
+                            user.setGrade(userVo.getGrade());
+                            user.setPeople(userVo.getPeople());
+                        }
+
+                        userMapper.updateById(user);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
                     }
 
                 }

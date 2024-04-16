@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zykj.btlv.domain.User;
 import com.zykj.btlv.mapper.UserMapper;
+import com.zykj.btlv.tool.MathTool;
 import com.zykj.btlv.tool.MoneyTransferTool;
 import io.reactivex.disposables.Disposable;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +85,21 @@ public class WalletTradeService {
         BigInteger bigInteger = new BigInteger(hexString.substring(2), 16);
 
         // 将 BigInteger 转换为字符串，去掉前导零
-        return "0x" + bigInteger.toString(16);
+        return bigInteger.toString(16);
+    }
+
+    public static String getHex16ToAddress(String s) {
+        return "0x"+formatAddr(removeLeadingZeros(s));
+    }
+
+    public static String formatAddr(String addr) {
+        Integer a = 40 - addr.length();
+        String s = "";
+        for (int i = 0; i < a; i++) {
+            s = s + "0";
+        }
+        s = s + addr;
+        return s;
     }
 
 
@@ -120,9 +135,9 @@ public class WalletTradeService {
     @Transactional
     public void dealEvent(String address, Log loggg, String txId) {
         String from = loggg.getTopics().get(1);
-        from = removeLeadingZeros(from);
+        from = getHex16ToAddress(from);
         String to = loggg.getTopics().get(2);
-        to = removeLeadingZeros(to);
+        to = getHex16ToAddress(to);
         QueryWrapper<User> wrapperFrom = new QueryWrapper<>();
         wrapperFrom.eq("address",from);
         User userFrom = userMapper.selectOne(wrapperFrom);
@@ -142,9 +157,9 @@ public class WalletTradeService {
 
     public String dealTransfer(Log loggg, String txId, String address) {
         String from = loggg.getTopics().get(1);
-        from = removeLeadingZeros(from);
+        from = getHex16ToAddress(from);
         String to = loggg.getTopics().get(2);
-        to = removeLeadingZeros(to);
+        to = getHex16ToAddress(to);
 
         String hexValue = loggg.getData();
         // 移除 "0x" 前缀
