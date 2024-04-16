@@ -19,7 +19,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from user where lp > 0")
     List<User> getLPAddr();
 
-    @Select("select * from user where balance > 500000000")
+    @Select("select * from user where balance > 100000000")
     List<User> getHoldAddr();
 }
 

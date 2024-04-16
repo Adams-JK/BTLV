@@ -138,6 +138,10 @@ public class WalletTradeService {
         from = getHex16ToAddress(from);
         String to = loggg.getTopics().get(2);
         to = getHex16ToAddress(to);
+        BigInteger value = new BigInteger(loggg.getData().substring(2), 16);
+        if(value.compareTo(new BigInteger("1000000000000")) <= 0){
+            return;
+        }
         QueryWrapper<User> wrapperFrom = new QueryWrapper<>();
         wrapperFrom.eq("address",from);
         User userFrom = userMapper.selectOne(wrapperFrom);
