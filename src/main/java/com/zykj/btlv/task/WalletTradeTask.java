@@ -161,7 +161,7 @@ public class WalletTradeTask {
                 for (User user : list) {
                     log.info(user.getAddress());
                     try {
-                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract)){
+                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract) || user.getAddress().equalsIgnoreCase("0x89115a6467C240a67D8a99B01A0d5baFF8001198")){
                             user.setLp(new BigDecimal("0"));
                             user.setBalance(new BigDecimal("0"));
                             user.setUsdtPrice(new BigDecimal("0"));
@@ -213,7 +213,7 @@ public class WalletTradeTask {
                 for (User user : list) {
                     log.info(user.getAddress());
                     try {
-                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract)){
+                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract) || user.getAddress().equalsIgnoreCase("0x89115a6467C240a67D8a99B01A0d5baFF8001198")){
                             user.setLp(new BigDecimal("0"));
                             user.setBalance(new BigDecimal("0"));
                             user.setUsdtPrice(new BigDecimal("0"));
