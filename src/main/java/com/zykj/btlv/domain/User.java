@@ -88,6 +88,18 @@ public class User implements Serializable {
     @TableField(value = "people")
     private Integer people;
 
+    /**
+     * performance
+     */
+    @TableField(value = "performance")
+    private BigDecimal performance;
+
+    /**
+     * isGrade
+     */
+    @TableField(value = "isGrade")
+    private Integer isGrade;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

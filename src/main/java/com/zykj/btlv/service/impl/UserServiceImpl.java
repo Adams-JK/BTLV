@@ -1,6 +1,7 @@
 package com.zykj.btlv.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -219,6 +220,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             ssss.add(aa);
         }
         return ssss;
+    }
+
+    @Override
+    public Result<Page<User>> getSJUser(Integer page, Integer offset) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.gt("isGrade", "grade");
+        if(ObjectUtil.isEmpty(page) || page < 0){
+            page = 1;
+        }
+        if(ObjectUtil.isEmpty(offset) || offset < 0){
+            offset = 10;
+        }
+        Page<User> iPage = new Page<User>(page, offset);
+        Page<User> selectPage = userMapper.selectPage(iPage,wrapper);
+        return ResultUtil.success(selectPage);
     }
 }
 

@@ -159,7 +159,6 @@ public class WalletTradeTask {
             ERC20Contract lpPair = ERC20Contract.builder(web3j, pair);
             try {
                 for (User user : list) {
-                    log.info(user.getAddress());
                     try {
                         if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract) || user.getAddress().equalsIgnoreCase("0x89115a6467C240a67D8a99B01A0d5baFF8001198")){
                             user.setLp(new BigDecimal("0"));
@@ -171,6 +170,8 @@ public class WalletTradeTask {
                             user.setReceived(new BigDecimal("0"));
                             user.setGrade(0);
                             user.setPeople(0);
+                            user.setPerformance(new BigDecimal("0"));
+                            user.setIsGrade(0);
                         }else {
                             UserVo userVo = getUser(user.getAddress());
                             AssetsVo assetsVo = getAssets(user.getAddress());
@@ -185,6 +186,24 @@ public class WalletTradeTask {
                             user.setReceived(assetsVo.getReceived());
                             user.setGrade(userVo.getGrade());
                             user.setPeople(userVo.getPeople());
+                            user.setPerformance(userVo.getPerformance1());
+                            Integer isGrade = 0;
+                            if(userVo.getPerformance1().compareTo(new BigDecimal("10000000")) >= 0){
+                                isGrade = 7;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("3000000")) >= 0){
+                                isGrade = 6;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("1000000")) >= 0){
+                                isGrade = 5;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("300000")) >= 0){
+                                isGrade = 4;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("100000")) >= 0){
+                                isGrade = 3;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("30000")) >= 0){
+                                isGrade = 2;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("10000")) >= 0){
+                                isGrade = 1;
+                            }
+                            user.setIsGrade(isGrade);
                         }
 
                         userMapper.updateById(user);

@@ -27,4 +27,6 @@ public interface UserService extends IService<User> {
     Result<DistributeDataVo> getDistributeData(Integer type);
 
     List<String> getDistributeDataV2(Integer type);
+
+    Result<Page<User>> getSJUser(Integer page, Integer offset);
 }
