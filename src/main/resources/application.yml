@@ -64,7 +64,7 @@ sa-token:
 
 #swagger
 swagger:
-  enable: false
+  enable: true
 
 chainId: "56"
 contract: "0x63b7698e74d902099f97fd515faed899afc6b666"

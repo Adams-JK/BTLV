@@ -223,18 +223,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Result<Page<User>> getSJUser(Integer page, Integer offset) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.gt("isGrade", "grade");
-        if(ObjectUtil.isEmpty(page) || page < 0){
-            page = 1;
-        }
-        if(ObjectUtil.isEmpty(offset) || offset < 0){
-            offset = 10;
-        }
-        Page<User> iPage = new Page<User>(page, offset);
-        Page<User> selectPage = userMapper.selectPage(iPage,wrapper);
-        return ResultUtil.success(selectPage);
+    public Result<List<User>> getSJUser() {
+
+        List<User> list = userMapper.getSJUser();
+        return ResultUtil.success(list);
     }
 }
 

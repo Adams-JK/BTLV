@@ -21,6 +21,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from user where balance > 100000000")
     List<User> getHoldAddr();
+
+    @Select("SELECT * FROM user WHERE isGrade > grade")
+    List<User> getSJUser();
 }
 
 
