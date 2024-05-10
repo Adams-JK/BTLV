@@ -1,8 +1,12 @@
 package com.zykj.btlv.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zykj.btlv.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -23,7 +27,10 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> getHoldAddr();
 
     @Select("SELECT * FROM user WHERE isGrade > grade")
-    List<User> getSJUser();
+    Page<User> getSJUser(Page<User> iPage);
+
+    @Select("SELECT * FROM user WHERE isGrade > grade")
+    List<User> getSJUserV2();
 }
 
 

@@ -90,7 +90,7 @@ public class WalletTradeTask {
             if (startBlockNum.longValue() >= lCurrentBlockNumber) { //同一个区块高度的不扫描,要等区块执行完了才可以
                 return;
             }
-            if (lCurrentBlockNumber >= startBlockNum + 40000) {
+            if (lCurrentBlockNumber >= startBlockNum + 4000) {
                 lCurrentBlockNumber = startBlockNum + 4000;
             }
             if (ObjectUtil.isNotEmpty(WalletTradeService.disposable)) {
@@ -230,7 +230,6 @@ public class WalletTradeTask {
             ERC20Contract lpPair = ERC20Contract.builder(web3j, pair);
             try {
                 for (User user : list) {
-                    log.info(user.getAddress());
                     try {
                         if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract) || user.getAddress().equalsIgnoreCase("0x89115a6467C240a67D8a99B01A0d5baFF8001198")){
                             user.setLp(new BigDecimal("0"));
@@ -256,6 +255,24 @@ public class WalletTradeTask {
                             user.setReceived(assetsVo.getReceived());
                             user.setGrade(userVo.getGrade());
                             user.setPeople(userVo.getPeople());
+                            user.setPerformance(userVo.getPerformance1());
+                            Integer isGrade = 0;
+                            if(userVo.getPerformance1().compareTo(new BigDecimal("10000000")) >= 0){
+                                isGrade = 7;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("3000000")) >= 0){
+                                isGrade = 6;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("1000000")) >= 0){
+                                isGrade = 5;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("300000")) >= 0){
+                                isGrade = 4;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("100000")) >= 0){
+                                isGrade = 3;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("30000")) >= 0){
+                                isGrade = 2;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("10000")) >= 0){
+                                isGrade = 1;
+                            }
+                            user.setIsGrade(isGrade);
                         }
 
                         userMapper.updateById(user);
@@ -269,6 +286,77 @@ public class WalletTradeTask {
             }
 
         }
+
+
+    }
+
+    @Scheduled(fixedDelay = 1000 * 5)
+    public void digital33() {
+        List<User> list = userMapper.getSJUserV2();
+        if (ObjectUtil.isNotEmpty(list)) {
+            Web3j web3j = web3jConfig.getWeb3jById(new BigInteger(chainIds));
+            ERC20Contract btlv = ERC20Contract.builder(web3j, contract);
+            ERC20Contract lpPair = ERC20Contract.builder(web3j, pair);
+            try {
+                for (User user : list) {
+                    try {
+                        if(user.getAddress().equalsIgnoreCase(pair) || user.getAddress().equalsIgnoreCase(contract) || user.getAddress().equalsIgnoreCase("0x89115a6467C240a67D8a99B01A0d5baFF8001198")){
+                            user.setLp(new BigDecimal("0"));
+                            user.setBalance(new BigDecimal("0"));
+                            user.setUsdtPrice(new BigDecimal("0"));
+                            user.setParentAddress("");
+                            user.setTotalQuota(new BigDecimal("0"));
+                            user.setSurplusQuota(new BigDecimal("0"));
+                            user.setReceived(new BigDecimal("0"));
+                            user.setGrade(0);
+                            user.setPeople(0);
+                        }else {
+                            UserVo userVo = getUser(user.getAddress());
+                            AssetsVo assetsVo = getAssets(user.getAddress());
+                            BigDecimal btlvBalance = new BigDecimal(btlv.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            BigDecimal lpBalance = new BigDecimal(lpPair.balanceOf(user.getAddress())).divide(BigDecimal.TEN.pow(18), 8, RoundingMode.DOWN);
+                            user.setLp(lpBalance);
+                            user.setBalance(btlvBalance);
+                            user.setUsdtPrice(userVo.getUsdtPrice());
+                            user.setParentAddress(userVo.getParentAddress());
+                            user.setTotalQuota(assetsVo.getTotalQuota());
+                            user.setSurplusQuota(assetsVo.getSurplusQuota());
+                            user.setReceived(assetsVo.getReceived());
+                            user.setGrade(userVo.getGrade());
+                            user.setPeople(userVo.getPeople());
+                            user.setPerformance(userVo.getPerformance1());
+                            Integer isGrade = 0;
+                            if(userVo.getPerformance1().compareTo(new BigDecimal("10000000")) >= 0){
+                                isGrade = 7;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("3000000")) >= 0){
+                                isGrade = 6;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("1000000")) >= 0){
+                                isGrade = 5;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("300000")) >= 0){
+                                isGrade = 4;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("100000")) >= 0){
+                                isGrade = 3;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("30000")) >= 0){
+                                isGrade = 2;
+                            }else if(userVo.getPerformance1().compareTo(new BigDecimal("10000")) >= 0){
+                                isGrade = 1;
+                            }
+                            user.setIsGrade(isGrade);
+                        }
+
+                        userMapper.updateById(user);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+
+        }
+
+
     }
 
     public UserVo getUser(String addrss) {

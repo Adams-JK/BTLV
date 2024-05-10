@@ -63,9 +63,13 @@ public class UserController {
 
     @ApiOperation("获取可升级用户信息")
     @SaCheckLogin
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page",value = "页码", required = false, dataType = "int"),
+            @ApiImplicitParam(name = "offset",value = "记录条数", required = false, dataType = "int"),
+    })
     @RequestMapping(value = "/getSJUser", method = RequestMethod.GET)
-    public Result<List<User>> getSJUser() throws Exception {
-        return userService.getSJUser();
+    public Result<Page<User>> getSJUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer offset) throws Exception {
+        return userService.getSJUser(page,offset);
     }
 
     @ApiOperation("获取奖励记录")

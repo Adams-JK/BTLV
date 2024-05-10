@@ -22,6 +22,10 @@ public class ChainConstant {
     );
 
     public static List<String> bscURLForSub = Arrays.asList(
+            "https://1rpc.io/bnb",
+            "https://bsc.publicnode.com",
+            "https://bsc-pokt.nodies.app",
+            "https://bsc.drpc.org",
             "https://services.tokenview.io/vipapi/nodeservice/bsc?apikey=W2kFupq7FkGGVYjZbbM3",
             "https://bsc-dataseed2.defibit.io",
             "https://bsc-dataseed1.ninicoin.io",

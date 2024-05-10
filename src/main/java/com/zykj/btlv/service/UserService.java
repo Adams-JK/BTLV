@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zykj.btlv.result.Result;
 import com.zykj.btlv.vo.DistributeDataVo;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,5 +29,5 @@ public interface UserService extends IService<User> {
 
     List<String> getDistributeDataV2(Integer type);
 
-    Result<List<User>> getSJUser();
+    Result<Page<User>> getSJUser(Integer page, Integer offset);
 }
